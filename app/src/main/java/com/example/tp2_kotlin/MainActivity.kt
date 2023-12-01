@@ -3,6 +3,8 @@ package com.example.tp2_kotlin
 import android.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -59,21 +61,32 @@ class MainActivity : AppCompatActivity() {
         recyclerview.layoutManager = LinearLayoutManager(this@MainActivity)
         recyclerview.adapter = adapter
 
-//        val seachEditText = binding.search
-//        val filter = adapter.filter
+        val seachEditText = binding.search
+        val filter = adapter.filter
 
-//        seachEditText.addTextChangedListener(object : TextWatcher {
-//            override fun afterTextChanged(s: Editable?) {
-//                filter.filter(s.toString())
-//            }
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                filter.filter(s.toString())
-//            }
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                filter.filter(s.toString())
-//            }
-//        })
+        seachEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                filter.filter(s.toString())
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                filter.filter(s.toString())
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filter.filter(s.toString())
+            }
+        })
 
+        val filterCheckBox = binding.filterCheckBox
+        filterCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            val filteredList = if (isChecked) {
+                students.filter { it.isPresent }
+            } else {
+                students
+            }
+            adapter.filter.filter(binding.search.text)
+            adapter.updateList(filteredList)
+        }
 
     }
+
 }

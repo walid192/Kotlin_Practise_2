@@ -14,8 +14,16 @@
 
     <TextView
         android:id="@+id/text"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:layout_marginStart="16dp"/>
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_gravity="center_vertical" />
 </LinearLayout>
