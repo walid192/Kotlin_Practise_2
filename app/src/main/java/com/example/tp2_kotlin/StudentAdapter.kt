@@ -10,9 +10,15 @@ import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.util.Locale
 
-class StudentAdapter(private val context: Context, private val students: List<Student>) :
+class StudentAdapter(private val context: Context, private val students: ArrayList<Student>) :
     RecyclerView.Adapter<StudentAdapter.StudentViewHolder>(),Filterable {
+    var dataFilterList = ArrayList<Student>()
+    init {
+        dataFilterList=students
+    }
+
     class StudentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textView: TextView
         var imageView: ImageView
@@ -34,7 +40,7 @@ class StudentAdapter(private val context: Context, private val students: List<St
     }
 
     override fun onBindViewHolder(holder: StudentAdapter.StudentViewHolder, position: Int) {
-        val currentItem = students[position]
+        val currentItem = dataFilterList[position]
         holder.textView.text = "${currentItem.firstName} ${currentItem.lastName}"
         val genderImageResource = if (currentItem.gender.equals("Homme", ignoreCase = true)) {
             R.drawable.boy
@@ -50,52 +56,38 @@ class StudentAdapter(private val context: Context, private val students: List<St
     }
 
     override fun getItemCount(): Int {
-        return students.size
+        return dataFilterList.size
     }
 
     override fun getFilter(): Filter {
-        return object : Filter() {
+        return object : Filter(){
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val filteredList = mutableListOf<Student>()
-                if (constraint == null || constraint.isEmpty()) {
-                    filteredList.addAll(students)
+                val charSearch = constraint.toString()
+                if (charSearch.isEmpty()) {
+                    dataFilterList = students
                 } else {
-                    val filterPattern = constraint.toString().lowercase().trim()
+                    val resultList = ArrayList<Student>()
                     for (student in students) {
-                        if (student.firstName.lowercase()
-                                .contains(filterPattern) || student.lastName.lowercase()
-                                .contains(filterPattern)
+                        if (student.firstName.lowercase(Locale.ROOT)
+                                .contains(charSearch.lowercase(Locale.ROOT))
                         ) {
-                            filteredList.add(student)
+                            resultList.add(student)
                         }
                     }
+                    dataFilterList = resultList
                 }
-                val results = FilterResults()
-                results.values = filteredList
-                return results
+                val filterResults = FilterResults()
+                filterResults.values = dataFilterList
+                return filterResults
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                students.clear()
-                students.addAll(results?.values as List<Student>)
+                dataFilterList = results?.values as ArrayList<Student>
                 notifyDataSetChanged()
             }
+
         }
-
     }
 
-    fun updateList(filteredList: List<Student>) {
-        students.clear()
-        students.addAll(filteredList)
-        notifyDataSetChanged()
-
-    }
 }
 
-private fun <E> List<E>.addAll(es: List<E>) {
-    return this.addAll(es)
-}
-
-private fun <E> List<E>.clear() {
-    return this.clear()
-}
