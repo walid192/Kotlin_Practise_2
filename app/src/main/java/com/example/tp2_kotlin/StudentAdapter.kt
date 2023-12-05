@@ -15,6 +15,8 @@ import java.util.Locale
 class StudentAdapter(private val context: Context, private val students: ArrayList<Student>) :
     RecyclerView.Adapter<StudentAdapter.StudentViewHolder>(),Filterable {
     var dataFilterList = ArrayList<Student>()
+
+
     init {
         dataFilterList=students
     }
@@ -88,6 +90,7 @@ class StudentAdapter(private val context: Context, private val students: ArrayLi
 
         }
     }
+
 
 }
 

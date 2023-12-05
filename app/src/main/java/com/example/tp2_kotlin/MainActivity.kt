@@ -35,14 +35,22 @@ class MainActivity : AppCompatActivity() {
             override fun onItemSelected(
                 adapterView: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                val toast = Toast.makeText(
-                    applicationContext,
-                    "Vous avez choisi : ${matieres[position]}",
-                    Toast.LENGTH_SHORT
-                )
-                toast.show()
+                students= if (position == 0) {
+                    StudentRepository.getStudentsCours()
+                } else {
+                    StudentRepository.getStudentsTP()
+                }
+                // TODO: Not working filters :
+//                binding.recyclerView.adapter = StudentAdapter(this@MainActivity, students)
+//                binding.recyclerView.adapter?.notifyDataSetChanged()
+                
+//                val toast = Toast.makeText(
+//                    applicationContext,
+//                    "Vous avez choisi : ${matieres[position]}",
+//                    Toast.LENGTH_SHORT
+//                )
+//                toast.show()
             }
-
             override fun onNothingSelected(adapterView: AdapterView<*>?) {
             }
         }
